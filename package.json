@@ -1,8 +1,12 @@
 {
   "name": "create-api-client",
-  "version": "0.0.0",
-  "description": "",
-  "keywords": [],
+  "version": "0.1.0",
+  "description": "Create api client with familiar path syntax",
+  "keywords": [
+    "api",
+    "restful",
+    "ajax"
+  ],
   "main": "dist/create-api-client.umd.js",
   "module": "dist/create-api-client.es5.js",
   "typings": "dist/types/create-api-client.d.ts",
@@ -12,7 +16,7 @@
   "author": "Art Pai <minipai@gmail.com>",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git@github.com:minipai/create-api-client.git"
   },
   "license": "MIT",
   "engines": {
