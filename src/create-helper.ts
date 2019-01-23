@@ -19,13 +19,19 @@ const createHelper = (path: string): Helper => {
   const toPath = compile(targetPath)
 
   return (params: any = {}) => {
-    const url = toPath(params)
-    const newParams: Params = Object.keys(params).reduce<Params>((acc, key) => {
-      if (namedParams.includes(key)) return acc
-      acc[key] = params[key]
-      return acc
-    }, {})
+    let url = toPath(params)
+    if (params.query) {
+      url = url + '?' + new URLSearchParams(params.query).toString()
+    }
+    const newParams: Params = Object.keys(params)
+      .concat('query')
+      .reduce<Params>((acc, key) => {
+        if (namedParams.includes(key)) return acc
+        acc[key] = params[key]
+        return acc
+      }, {})
     newParams.method = method
+
     return [url, newParams]
   }
 }

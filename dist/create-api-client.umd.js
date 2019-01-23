@@ -228,7 +228,12 @@
       return function (params) {
           if (params === void 0) { params = {}; }
           var url = toPath(params);
-          var newParams = Object.keys(params).reduce(function (acc, key) {
+          if (params.query) {
+              url = url + '?' + new URLSearchParams(params.query).toString();
+          }
+          var newParams = Object.keys(params)
+              .concat('query')
+              .reduce(function (acc, key) {
               if (namedParams.includes(key))
                   return acc;
               acc[key] = params[key];

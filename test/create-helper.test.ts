@@ -17,6 +17,14 @@ describe('#createHelper', () => {
     expect(getMethod(createHelper('GET /post'))).toBe('GET')
     expect(getMethod(createHelper('POST /post'))).toBe('POST')
   })
+  it('builds search query to url', () => {
+    const path = '/any/post/:id'
+    const client = createHelper(path)
+    const data = { query: { foo: 9, bar: 999 }, method: 'DELETE', id: 1, bar: 10 }
+    const [url, params] = client(data)
+
+    expect(url).toBe('/any/post/1?foo=9&bar=999')
+  })
   it('pass other paramas as it is', () => {
     const path = '/any/post'
     const client = createHelper(path)
