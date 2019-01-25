@@ -1,7 +1,7 @@
 {
   "name": "create-api-client",
   "version": "0.1.0",
-  "description": "Create api client with familiar path syntax",
+  "description": "Use the popular path syntax to create api client",
   "keywords": [
     "api",
     "restful",
