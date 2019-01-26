@@ -2,6 +2,8 @@
 
 > Use the popular path syntax `/enpoint/:id` to create api client
 
+[![Build Status](https://travis-ci.org/minipai/create-api-client.svg?branch=master)](https://travis-ci.org/minipai/create-api-client)
+
 ## Install
 
 ```
