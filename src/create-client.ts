@@ -1,32 +1,40 @@
 import { createHelper } from './create-helper'
 
-type FetchClient = (params: Object) => any
-type FetchMapping = { [endpoint: string]: FetchClient }
+type ApiClient = (params: Object) => any
+type FetchMapping = { [endpoint: string]: ApiClient }
 type PathMapping = { [endpoint: string]: string }
-type IFetch = (url: string, params: Object) => any
+
 type Config = {
-  fetch: IFetch
+  fetchClient: (url: string, params: Object) => any
+  fetchParams: (params: Object) => Object
 }
-type CreateFetchClient = (path: string, config?: Config) => FetchClient
-type MapCreateClient = (pathMapping: PathMapping, config?: Config) => FetchMapping
-type ConfigCreateClient = (defaultOptions: Object) => CreateClient
+type UserConfig = {
+  fetchClient?: Config['fetchClient']
+  fetchParams?: Config['fetchParams']
+}
+type CreateApiClient = (path: string, config?: UserConfig) => ApiClient
+type MapCreateClient = (pathMapping: PathMapping, config?: UserConfig) => FetchMapping
+type ConfigCreateClient = (userConfig: UserConfig) => CreateClient
 
 interface CreateClient {
-  (path: string, config?: Config): FetchClient
-  config(config: Config): CreateClient
-  map(pathMapping: PathMapping, config?: Config): FetchMapping
+  (path: string, config?: UserConfig): ApiClient
+  config(config: UserConfig): CreateClient
+  map(pathMapping: PathMapping, config?: UserConfig): FetchMapping
 }
 
 const defaultConfig: Config = {
-  fetch: fetch
+  fetchClient: fetch,
+  fetchParams: params => params
 }
 
-const create: CreateFetchClient = (path, config = defaultConfig) => {
+const create: CreateApiClient = (path, _config) => {
+  const config: Config = Object.assign({}, defaultConfig, _config)
+
   const helper = createHelper(path)
   return (data: Object) => {
     const [url, params] = helper(data)
 
-    return config.fetch(url, params)
+    return config.fetchClient(url, params)
   }
 }
 
@@ -37,10 +45,10 @@ const map: MapCreateClient = (pathMapping, config) => {
   }, {})
 }
 
-const config: ConfigCreateClient = defaultOptions => {
+const config: ConfigCreateClient = userConfig => {
   return Object.assign(
-    (path: string, options?: Config) => {
-      const newOptions = Object.assign({}, defaultOptions, options)
+    (path: string, options?: Object) => {
+      const newOptions = Object.assign({}, userConfig, options)
       return create(path, newOptions)
     },
     {

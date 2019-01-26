@@ -4,7 +4,7 @@ describe('#createClient', () => {
   it('build api client', () => {
     const mockCallback = jest.fn()
     const path = '/foo/:id'
-    const getFoo = createClient(path, { fetch: mockCallback })
+    const getFoo = createClient(path, { fetchClient: mockCallback })
 
     getFoo({ id: 100 })
 
@@ -29,7 +29,7 @@ describe('#createClient', () => {
     it('return a client creator with config set', () => {
       const mockCallback = jest.fn()
       const createMockClient = createClient.config({
-        fetch: mockCallback
+        fetchClient: mockCallback
       })
       const path = 'PUT /bar/:id'
       const getFoo = createMockClient(path)
@@ -46,7 +46,7 @@ describe('#createClient', () => {
       const mockCallback = jest.fn()
       const pathMapping = { getFoo: 'PUT /bar/:id', removeBar: 'DELETE /foo/:id' }
       const apiClient = createClient.map(pathMapping, {
-        fetch: mockCallback
+        fetchClient: mockCallback
       })
       apiClient.getFoo({ id: 200 })
       apiClient.removeBar({ id: 300 })
