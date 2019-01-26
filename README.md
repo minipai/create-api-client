@@ -2,7 +2,7 @@
 
 > Use the popular path syntax `/enpoint/:id` to create api client
 
-[![Build Status](https://travis-ci.org/minipai/create-api-client.svg?branch=master)](https://travis-ci.org/minipai/create-api-client) [![Greenkeeper badge](https://badges.greenkeeper.io/minipai/create-api-client.svg)](https://greenkeeper.io/) [![Coverage Status](https://coveralls.io/repos/github/minipai/create-api-client/badge.svg?branch=master)](https://coveralls.io/github/minipai/create-api-client?branch=master)
+[![npm version](https://badge.fury.io/js/create-api-client.svg)](https://badge.fury.io/js/create-api-client) [![Build Status](https://travis-ci.org/minipai/create-api-client.svg?branch=master)](https://travis-ci.org/minipai/create-api-client) [![Greenkeeper badge](https://badges.greenkeeper.io/minipai/create-api-client.svg)](https://greenkeeper.io/) [![Coverage Status](https://coveralls.io/repos/github/minipai/create-api-client/badge.svg?branch=master)](https://coveralls.io/github/minipai/create-api-client?branch=master)
 
 ## Install
 
