@@ -74,6 +74,9 @@
     },
     "collectCoverageFrom": [
       "src/*.{js,ts}"
+    ],
+    "setupFiles": [
+      "./test/setup.js"
     ]
   },
   "prettier": {

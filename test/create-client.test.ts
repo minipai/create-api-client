@@ -14,6 +14,17 @@ describe('#createClient', () => {
     expect(parmas.method).toBe('GET')
   })
 
+  it('use native fetch by default', () => {
+    const mockCallback = jest.fn()
+    const path = '/foo/:id'
+    const getFoo = createClient(path)
+
+    // global.fetch is mocked to throw
+    expect(() => {
+      getFoo({ id: 100 })
+    }).toThrow()
+  })
+
   describe('#config', () => {
     it('return a client creator with config set', () => {
       const mockCallback = jest.fn()

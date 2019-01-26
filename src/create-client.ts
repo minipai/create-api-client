@@ -3,11 +3,13 @@ import { createHelper } from './create-helper'
 type FetchClient = (params: Object) => any
 type FetchMapping = { [endpoint: string]: FetchClient }
 type PathMapping = { [endpoint: string]: string }
-type WhatwgFetch = (url: string, params: Object) => any
+type IFetch = (url: string, params: Object) => any
 type Config = {
-  fetch: WhatwgFetch
+  fetch: IFetch
 }
 type CreateFetchClient = (path: string, config?: Config) => FetchClient
+type MapCreateClient = (pathMapping: PathMapping, config?: Config) => FetchMapping
+type ConfigCreateClient = (defaultOptions: Object) => CreateClient
 
 interface CreateClient {
   (path: string, config?: Config): FetchClient
@@ -15,7 +17,11 @@ interface CreateClient {
   map(pathMapping: PathMapping, config?: Config): FetchMapping
 }
 
-const create: CreateFetchClient = (path, config = { fetch: fetch }) => {
+const defaultConfig: Config = {
+  fetch: fetch
+}
+
+const create: CreateFetchClient = (path, config = defaultConfig) => {
   const helper = createHelper(path)
   return (data: Object) => {
     const [url, params] = helper(data)
@@ -24,14 +30,14 @@ const create: CreateFetchClient = (path, config = { fetch: fetch }) => {
   }
 }
 
-const map = (pathMapping: PathMapping, config: Config): FetchMapping => {
+const map: MapCreateClient = (pathMapping, config) => {
   return Object.keys(pathMapping).reduce<FetchMapping>((acc, endpoint) => {
     acc[endpoint] = create(pathMapping[endpoint], config)
     return acc
   }, {})
 }
 
-const config = (defaultOptions: Object): CreateClient => {
+const config: ConfigCreateClient = defaultOptions => {
   return Object.assign(
     (path: string, options?: Config) => {
       const newOptions = Object.assign({}, defaultOptions, options)
