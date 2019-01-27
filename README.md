@@ -85,6 +85,52 @@ postComment({
 // })
 ```
 
+## API
+
+### createClient
+
+```
+createClient(path, config)
+```
+
+#### Returns
+
+- (Function): Returns created API client.
+
+#### Arguments
+
+- `path` : path to use [path-to-regex](https://github.com/pillarjs/path-to-regexp) to parse and compile
+- `config` (Object) : Config object to customize api client
+- `config.fetchClient` (function): The function to issue request. Defaults to global variable `fetch`.
+
+### createClient.config
+
+```
+createClient.config(config)
+```
+
+#### Arguments
+
+- `config` (Object) : Config object to customize api client
+
+#### Returns
+
+- (Function): Returns a new createClient preseted with provided config.
+
+### createClient.map
+
+```
+createClient.map(pathMapping)
+```
+
+#### Arguments
+
+- `pathMapping` (Object) : An mapping of method name and path. e.g. `{ getUser: 'GET '/user', removeUser: 'DELETE /user/:id' }`
+
+#### Returns
+
+- (Object): Returns a createClient mapping Object. e.g. `{ getUser: [createClient Function], removeUser: [createClient Function] }`
+
 ## License
 
 MIT
