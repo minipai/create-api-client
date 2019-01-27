@@ -1,7 +1,18 @@
 import { createClient } from '../src/create-api-client'
 
 describe('#createClient', () => {
-  it('build api client', () => {
+  it('build an api client, use native fetch by default', () => {
+    const mockCallback = jest.fn()
+    const path = '/foo/:id'
+    const getFoo = createClient(path)
+
+    // global.fetch is mocked to throw
+    expect(() => {
+      getFoo({ id: 100 })
+    }).toThrow()
+  })
+
+  it('can customize fetchClient with config.fetchClient', () => {
     const mockCallback = jest.fn()
     const path = '/foo/:id'
     const getFoo = createClient(path, { fetchClient: mockCallback })
@@ -14,15 +25,21 @@ describe('#createClient', () => {
     expect(parmas.method).toBe('GET')
   })
 
-  it('use native fetch by default', () => {
+  it('can customize params process with config.fetchParams', () => {
     const mockCallback = jest.fn()
     const path = '/foo/:id'
-    const getFoo = createClient(path)
+    const fetchParams = params => {
+      params.addition = 'SUPRISE!'
+      return params
+    }
+    const getFoo = createClient(path, { fetchClient: mockCallback, fetchParams: fetchParams })
 
-    // global.fetch is mocked to throw
-    expect(() => {
-      getFoo({ id: 100 })
-    }).toThrow()
+    getFoo({ id: 100 })
+
+    const [url, parmas] = mockCallback.mock.calls[0]
+
+    expect(url).toBe('/foo/100')
+    expect(parmas.addition).toBe('SUPRISE!')
   })
 
   describe('#config', () => {

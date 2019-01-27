@@ -1,6 +1,6 @@
 {
   "name": "create-api-client",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Use the popular path syntax to create api client",
   "keywords": [
     "api",
@@ -50,6 +50,11 @@
     }
   },
   "jest": {
+    "globals": {
+      "ts-jest": {
+        "diagnostics": false
+      }
+    },
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },

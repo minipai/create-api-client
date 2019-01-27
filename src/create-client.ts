@@ -33,8 +33,8 @@ const create: CreateApiClient = (path, _config) => {
   const helper = createHelper(path)
   return (data: Object) => {
     const [url, params] = helper(data)
-
-    return config.fetchClient(url, params)
+    const { fetchClient, fetchParams } = config
+    return fetchClient(url, fetchParams(params))
   }
 }
 
