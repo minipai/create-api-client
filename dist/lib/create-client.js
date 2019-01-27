@@ -1,12 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var create_helper_1 = require("./create-helper");
-var create = function (path, config) {
-    if (config === void 0) { config = { fetch: fetch }; }
+var defaultConfig = {
+    fetchClient: fetch,
+    fetchParams: function (params) { return params; }
+};
+var create = function (path, _config) {
+    var config = Object.assign({}, defaultConfig, _config);
     var helper = create_helper_1.createHelper(path);
     return function (data) {
         var _a = helper(data), url = _a[0], params = _a[1];
-        return config.fetch(url, params);
+        var fetchClient = config.fetchClient, fetchParams = config.fetchParams;
+        return fetchClient(url, fetchParams(params));
     };
 };
 var map = function (pathMapping, config) {
@@ -15,9 +20,9 @@ var map = function (pathMapping, config) {
         return acc;
     }, {});
 };
-var config = function (defaultOptions) {
+var config = function (userConfig) {
     return Object.assign(function (path, options) {
-        var newOptions = Object.assign({}, defaultOptions, options);
+        var newOptions = Object.assign({}, userConfig, options);
         return create(path, newOptions);
     }, {
         config: config,
