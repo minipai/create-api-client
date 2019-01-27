@@ -1,17 +1,10 @@
 import { createHelper } from './create-helper'
+import { Config, UserConfig, defaultConfig } from './config'
 
 type ApiClient = (params: Object) => any
 type FetchMapping = { [endpoint: string]: ApiClient }
 type PathMapping = { [endpoint: string]: string }
 
-type Config = {
-  fetchClient: (url: string, params: Object) => any
-  fetchParams: (params: Object) => Object
-}
-type UserConfig = {
-  fetchClient?: Config['fetchClient']
-  fetchParams?: Config['fetchParams']
-}
 type CreateApiClient = (path: string, config?: UserConfig) => ApiClient
 type MapCreateClient = (pathMapping: PathMapping, config?: UserConfig) => FetchMapping
 type ConfigCreateClient = (userConfig: UserConfig) => CreateClient
@@ -22,19 +15,14 @@ interface CreateClient {
   map(pathMapping: PathMapping, config?: UserConfig): FetchMapping
 }
 
-const defaultConfig: Config = {
-  fetchClient: fetch,
-  fetchParams: params => params
-}
-
 const create: CreateApiClient = (path, _config) => {
   const config: Config = Object.assign({}, defaultConfig, _config)
 
-  const helper = createHelper(path)
+  const helper = createHelper(path, config)
   return (data: Object) => {
     const [url, params] = helper(data)
-    const { fetchClient, fetchParams } = config
-    return fetchClient(url, fetchParams(params))
+    const { fetchClient } = config
+    return fetchClient(url, params)
   }
 }
 

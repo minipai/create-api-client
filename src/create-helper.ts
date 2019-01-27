@@ -1,13 +1,10 @@
+import { Params, Config, UserConfig, defaultConfig } from './config'
 import { parse, compile } from 'path-to-regexp'
 
-type Params = {
-  method?: string
-  [key: string]: any
-}
-
 type Helper = (params: Object) => [string, Params]
+type CreateHelper = (path: string, config: Config) => Helper
 
-const createHelper = (path: string): Helper => {
+const createHelper: CreateHelper = (path, config = defaultConfig) => {
   const namedParams = parse(path)
     .map((p: any) => p.name)
     .filter(n => n)
@@ -23,16 +20,16 @@ const createHelper = (path: string): Helper => {
     if (params.query) {
       url = url + '?' + new URLSearchParams(params.query).toString()
     }
-    const newParams: Params = Object.keys(params)
-      .concat('query')
-      .reduce<Params>((acc, key) => {
-        if (namedParams.includes(key)) return acc
-        acc[key] = params[key]
-        return acc
-      }, {})
+    const newParams: Params = Object.keys(params).reduce<any>((acc, key) => {
+      if (namedParams.includes(key)) return acc
+      acc[key] = params[key]
+      return acc
+    }, {})
+
+    newParams.query = params.query
     newParams.method = method
 
-    return [url, newParams]
+    return [url, config.fetchParams(newParams)]
   }
 }
 
