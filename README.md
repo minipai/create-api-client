@@ -125,7 +125,7 @@ createClient.map(pathMapping)
 
 #### Arguments
 
-- `pathMapping` (Object) : An mapping of method name and path. e.g. `{ getUser: 'GET '/user', removeUser: 'DELETE /user/:id' }`
+- `pathMapping` (Object) : An mapping of method name and path. e.g. `{ getUser: 'GET /user', removeUser: 'DELETE /user/:id' }`
 
 #### Returns
 
