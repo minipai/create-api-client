@@ -2,15 +2,15 @@
 
 > Use the popular path syntax `/enpoint/:id` to create api client
 
-[![npm version](https://badge.fury.io/js/create-api-client.svg)](https://badge.fury.io/js/create-api-client) [![Build Status](https://travis-ci.org/minipai/create-api-client.svg?branch=master)](https://travis-ci.org/minipai/create-api-client) [![Greenkeeper badge](https://badges.greenkeeper.io/minipai/create-api-client.svg)](https://greenkeeper.io/) [![Coverage Status](https://coveralls.io/repos/github/minipai/create-api-client/badge.svg?branch=master)](https://coveralls.io/github/minipai/create-api-client?branch=master)
+[![npm version](https://badge.fury.io/js/create-api-client.svg)](https://badge.fury.io/js/create-api-client) [![Build Status](https://travis-ci.org/minipai/create-api-client.svg?branch=master)](https://travis-ci.org/minipai/create-api-client) [![Coverage Status](https://coveralls.io/repos/github/minipai/create-api-client/badge.svg?branch=master)](https://coveralls.io/github/minipai/create-api-client?branch=master) [![Greenkeeper badge](https://badges.greenkeeper.io/minipai/create-api-client.svg)](https://greenkeeper.io/)
 
 ## Install
 
 ```
-npm install create-api-client
+npm install create-api-client --save
 ```
 
-## Usage
+## Use
 
 ```
 import { createClient } from 'create-api-client';
@@ -24,25 +24,65 @@ getEndpoint({id: 1})
 
 ## How it works
 
-`createClient` use `path-to-regex` to parse your path, find every segment of path which started with `:` and create an api client.
+`createClient` use [path-to-regex](https://github.com/pillarjs/path-to-regexp) to parse your path, find every segment which started with `:` as parameters and create an api client.
 
 ```
-const postComment = createClient("POST /api/post/:postId/comment/:commentId");
-
+const getComment = createClient("/api/post/:postId/comment/:commentId");
 ```
 
-The created api client would take the key which is path params (`postId`, `commentId`) from passed in object to build url to request to, and pass the rest to the fetch client.
-
-If you prefix path with HTTP methods, the created api client would also pass it. So the following call
+The created api client would take the key which is path params (`postId`, `commentId`) from passed in params to build URL and call fetch client(defaults to global variable `fetch`) as the first argument.
 
 ```
-postComment({postId: 10, commentId: 100, body: {message: 1000}})
+getComment({postId: 10, commentId: 100})
+// same as
+// fetch("/api/post/10/comment/100")
 ```
 
-is same as
+If you provide `query` in params, the query string would generate from it and append to url.
 
 ```
-fetch("/api/post/10/comment/100", {method: "POST", body: {message: 1000}})
+getComment({postId: 10, commentId: 100, query: {latest: 10}})
+// same as
+// fetch("/api/post/10/comment/100?latest=10")
+```
+
+You can change HTTP method by prefix path with HTTP method name.
+
+```
+const getComment = createClient("POST /api/post/:postId");
+```
+
+The created api client would pass it as `method` in second argument.
+
+```
+postComment({postId: 10})
+// same as
+// fetch("/api/post/10", { method: 'POST'})
+```
+
+Finally, all other params you passed to the API client would pass to fetch client as it is. Which you can put header, body, ...etc.
+
+```
+postComment({
+  postId: 10,
+  headers = {
+    Accept: "application/json"
+  },
+  body: {
+    message: 1000
+    }
+  }
+)
+// same as
+// fetch("/api/post/10", {
+//   method: "POST",
+//   headers: {
+//     Accept: "application/json"
+//   },
+//   body: {
+//     message: 1000
+//   }
+// })
 ```
 
 ## License
