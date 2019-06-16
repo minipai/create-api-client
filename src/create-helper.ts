@@ -2,7 +2,7 @@ import { Params, Config, UserConfig, defaultConfig } from './config'
 import { parse, compile } from 'path-to-regexp'
 
 type Helper = (params: Object) => [string, Params]
-type CreateHelper = (path: string, config: Config) => Helper
+type CreateHelper = (path: string, config?: Config) => Helper
 
 const createHelper: CreateHelper = (path, config = defaultConfig) => {
   const namedParams = parse(path)
