@@ -131,7 +131,7 @@
     "typescript": "^3.0.3"
   },
   "dependencies": {
-    "path-to-regexp": "^3.0.0",
+    "path-to-regexp": "^4.0.0",
     "release-it": "^10.1.0"
   }
 }
