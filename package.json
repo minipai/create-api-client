@@ -132,6 +132,6 @@
   },
   "dependencies": {
     "path-to-regexp": "^3.0.0",
-    "release-it": "^10.1.0"
+    "release-it": "^13.4.0"
   }
 }
